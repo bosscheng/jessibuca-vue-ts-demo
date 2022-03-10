@@ -1,0 +1,15 @@
+{
+  "name": "jessibuca-vue-ts-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "vue": "3.2.31"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-typescript": "~4.5.12"
+  }
+}
