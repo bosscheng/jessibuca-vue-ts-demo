@@ -6,9 +6,9 @@
       <div class="input">
         <div>输入URL：</div>
         <input
-            type="input"
-            autocomplete="on"
-            :value="playUrl"
+          type="input"
+          autocomplete="on"
+          :value="playUrl"
         />
         <button v-if="!playing" @click="play">播放</button>
         <button v-else @click="pause">停止</button>
@@ -25,6 +25,7 @@
 // @ts-nocheck
 import {ref} from "vue";
 import {onMounted, onUnmounted} from "vue";
+
 export default {
   name: "JessibucaDemo",
   setup() {
@@ -34,11 +35,12 @@ export default {
     const showBandwidth = ref(false)
     const showOperateBtns = ref(false);
     const forceNoOffscreen = ref(false);
-    const playUrl = ref('http://flv.bdplay.nodemedia.cn/live/bbb.flv');
+    const playUrl = ref('https://live.nodemedia.cn:8443/live/b480_264.flv');
     const playing = ref(false);
     const quieting = ref(true);
     const loaded = ref(false);
     const createJessibuca = () => {
+      // eslint-disable-next-line
       jessibuca = new (window as any).Jessibuca({
         container: container.value,
         videoBuffer: 0.2, // 缓存时长
@@ -63,7 +65,7 @@ export default {
         console.log("on load");
       });
 
-      jessibuca.on("log", function (msg : any) {
+      jessibuca.on("log", function (msg: any) {
         console.log("on log", msg);
       });
       jessibuca.on("record", function (msg: any) {
@@ -162,8 +164,11 @@ export default {
       createJessibuca();
     })
 
-    onUnmounted(() => {
-      jessibuca && jessibuca.destroy();
+    onUnmounted(async () => {
+      if (jessibuca) {
+        await jessibuca && jessibuca.destroy();
+        jessibuca = null;
+      }
     })
 
     const play = () => {
@@ -176,9 +181,10 @@ export default {
       playing.value = false;
     }
 
-    const destroy = ()=>{
+    const destroy = async () => {
       if (jessibuca) {
-        jessibuca.destroy();
+        await jessibuca.destroy();
+        jessibuca = null;
       }
       createJessibuca();
       playing.value = false;
@@ -272,12 +278,6 @@ export default {
 
 .option span {
   color: white;
-}
-
-.page {
-  background: url(/bg.jpg);
-  background-repeat: no-repeat;
-  background-position: top;
 }
 
 @media (max-width: 720px) {
